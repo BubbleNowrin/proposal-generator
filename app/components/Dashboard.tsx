@@ -87,11 +87,12 @@ export default function Dashboard() {
   return (
     <main className="min-h-screen bg-gray-50 pt-16 pb-20">
       {/* Content */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 lg:py-8">
         {/* Progress Steps - Hidden when history is open */}
         {!showHistory && (
           <div className="max-w-4xl mx-auto mb-8">
-            <div className="flex items-center justify-center space-x-8 py-8">
+            {/* Desktop Progress Steps */}
+            <div className="hidden md:flex items-center justify-center space-x-8 py-8">
               {/* Step 1 */}
               <div className={`flex flex-col items-center transition-colors ${
                 currentStep === 1 ? 'text-blue-600' : 'text-gray-400'
@@ -139,6 +140,63 @@ export default function Dashboard() {
                 </div>
                 <span className="text-sm font-medium">Generate</span>
                 <span className="text-xs opacity-75">AI proposal creation</span>
+              </div>
+            </div>
+
+            {/* Mobile Progress Steps */}
+            <div className="md:hidden py-4">
+              <div className="flex items-center justify-between px-4">
+                <div className={`flex items-center space-x-3 ${
+                  currentStep === 1 ? 'text-blue-600' : 'text-gray-400'
+                }`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-colors ${
+                    currentStep >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'
+                  }`}>
+                    1
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium block">Profile</span>
+                    <span className="text-xs opacity-75">Choose</span>
+                  </div>
+                </div>
+
+                <div className={`flex items-center space-x-3 ${
+                  currentStep === 2 ? 'text-blue-600' : 'text-gray-400'
+                }`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-colors ${
+                    currentStep >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'
+                  }`}>
+                    2
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium block">Job</span>
+                    <span className="text-xs opacity-75">Enter</span>
+                  </div>
+                </div>
+
+                <div className={`flex items-center space-x-3 ${
+                  currentStep === 3 ? 'text-blue-600' : 'text-gray-400'
+                }`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm transition-colors ${
+                    currentStep >= 3 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'
+                  }`}>
+                    3
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium block">Generate</span>
+                    <span className="text-xs opacity-75">Proposal</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile Progress Bar */}
+              <div className="mt-4 px-4">
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${(currentStep / 3) * 100}%` }}
+                  ></div>
+                </div>
               </div>
             </div>
           </div>

@@ -141,20 +141,22 @@ export default function Navbar() {
               </div>
             )}
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+            {/* Mobile Menu Button - Only show when user is not logged in */}
+            {!user && (
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
+        {/* Mobile Navigation - Only show when user is not logged in */}
+        {isMenuOpen && !user && (
           <div className="md:hidden border-t border-gray-200 py-4">
             <div className="space-y-2">
               {navigation.map((item) => (
@@ -178,25 +180,6 @@ export default function Navbar() {
                 </Link>
               ))}
             </div>
-            
-            {user && (
-              <div className="mt-4 pt-4 border-t border-gray-200 space-y-2">
-                <div className="px-4 py-2">
-                  <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                  <p className="text-sm text-gray-500">{user.email}</p>
-                </div>
-                <button
-                  onClick={() => {
-                    logout()
-                    setIsMenuOpen(false)
-                  }}
-                  className="flex items-center space-x-3 w-full px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
-                >
-                  <span>🚪</span>
-                  <span>Sign Out</span>
-                </button>
-              </div>
-            )}
           </div>
         )}
       </div>

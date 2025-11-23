@@ -111,88 +111,96 @@ export default function CreatePost({ user, onPostCreated, onCancel }: CreatePost
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Ask a Question</h1>
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 lg:p-8">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Ask a Question</h1>
           <button
             onClick={onCancel}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 hover:text-gray-700 p-1"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
         {/* Author Type Selection */}
-        <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-          <h3 className="font-semibold text-gray-900 mb-3">How would you like to post?</h3>
+        <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-gray-50 rounded-lg">
+          <h3 className="font-semibold text-gray-900 mb-3 text-sm sm:text-base">How would you like to post?</h3>
           <div className="space-y-3">
             {user && (
-              <label className="flex items-center">
+              <label className="flex items-start sm:items-center">
                 <input
                   type="radio"
                   value="logged_in"
                   checked={authorType === 'logged_in'}
                   onChange={(e) => setAuthorType(e.target.value as any)}
-                  className="mr-3"
+                  className="mt-1 sm:mt-0 mr-3 flex-shrink-0"
                 />
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                    {user.name.charAt(0)}
+                <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 min-w-0">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                      {user.name.charAt(0)}
+                    </div>
+                    <span className="font-medium truncate">{user.name}</span>
                   </div>
-                  <span className="font-medium">{user.name}</span>
-                  <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-sm text-gray-500">(Verified account)</span>
+                  <div className="flex items-center space-x-2 text-sm">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-gray-500">(Verified account)</span>
+                  </div>
                 </div>
               </label>
             )}
             
-            <label className="flex items-center">
+            <label className="flex items-start sm:items-center">
               <input
                 type="radio"
                 value="random"
                 checked={authorType === 'random'}
                 onChange={(e) => setAuthorType(e.target.value as any)}
-                className="mr-3"
+                className="mt-1 sm:mt-0 mr-3 flex-shrink-0"
               />
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                  {(customName || generateRandomName()).charAt(0)}
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 min-w-0">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                    {(customName || generateRandomName()).charAt(0)}
+                  </div>
+                  <span className="font-medium truncate">{customName || 'Random Username'}</span>
                 </div>
-                <span className="font-medium">{customName || 'Random Username'}</span>
                 <button
                   type="button"
                   onClick={generateNewName}
-                  className="text-purple-600 hover:text-purple-800 text-sm underline"
+                  className="text-purple-600 hover:text-purple-800 text-sm underline self-start sm:self-auto"
                 >
                   Generate New
                 </button>
               </div>
             </label>
             
-            <label className="flex items-center">
+            <label className="flex items-start sm:items-center">
               <input
                 type="radio"
                 value="anonymous"
                 checked={authorType === 'anonymous'}
                 onChange={(e) => setAuthorType(e.target.value as any)}
-                className="mr-3"
+                className="mt-1 sm:mt-0 mr-3 flex-shrink-0"
               />
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-white text-sm">
-                  ?
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-white text-sm flex-shrink-0">
+                    ?
+                  </div>
+                  <span className="font-medium">Anonymous</span>
                 </div>
-                <span className="font-medium">Anonymous</span>
                 <span className="text-sm text-gray-500">(Completely private)</span>
               </div>
             </label>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {/* Title */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -203,7 +211,7 @@ export default function CreatePost({ user, onPostCreated, onCancel }: CreatePost
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="What's your programming question? Be specific and clear."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
               maxLength={200}
               required
             />
@@ -219,8 +227,8 @@ export default function CreatePost({ user, onPostCreated, onCancel }: CreatePost
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="Provide all the details. What did you try? What exactly isn't working? Include code, error messages, or screenshots if helpful."
-              rows={8}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              rows={6}
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base resize-y min-h-[120px]"
               maxLength={10000}
               required
             />
@@ -237,7 +245,7 @@ export default function CreatePost({ user, onPostCreated, onCancel }: CreatePost
               value={tags}
               onChange={(e) => setTags(e.target.value)}
               placeholder="javascript, react, nodejs (comma separated)"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
             />
             <p className="text-xs text-gray-500 mt-1">
               Add tags to help others find your question. Separate multiple tags with commas.
@@ -307,18 +315,18 @@ export default function CreatePost({ user, onPostCreated, onCancel }: CreatePost
           </div>
 
           {/* Submit Buttons */}
-          <div className="flex justify-end space-x-4 pt-6 border-t">
+          <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 pt-4 sm:pt-6 border-t">
             <button
               type="button"
               onClick={onCancel}
-              className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              className="px-4 sm:px-6 py-2 sm:py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors text-sm sm:text-base"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting || !title.trim() || !content.trim()}
-              className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
+              className="px-4 sm:px-6 py-2 sm:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2 text-sm sm:text-base"
             >
               {isSubmitting && (
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
