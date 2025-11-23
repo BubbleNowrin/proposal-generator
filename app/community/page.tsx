@@ -100,11 +100,11 @@ export default function CommunityPage() {
                 </div>
 
                 {/* Filters and Sort */}
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2 sm:space-x-3 overflow-x-auto pb-2 scrollbar-hide">
                   {/* Filter Tags */}
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 flex-shrink-0">
                     <button 
-                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                      className={`px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                         selectedTag === '' 
                           ? 'bg-blue-100 text-blue-700 shadow-sm' 
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -114,7 +114,7 @@ export default function CommunityPage() {
                       All
                     </button>
                     <button 
-                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                      className={`px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                         selectedTag === 'proposal' 
                           ? 'bg-blue-100 text-blue-700 shadow-sm' 
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -124,7 +124,7 @@ export default function CommunityPage() {
                       Proposals
                     </button>
                     <button 
-                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                      className={`px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                         selectedTag === 'freelancing' 
                           ? 'bg-blue-100 text-blue-700 shadow-sm' 
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -136,18 +136,18 @@ export default function CommunityPage() {
                   </div>
 
                   {/* Sort Dropdown */}
-                  <div className="relative">
+                  <div className="relative flex-shrink-0">
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-2.5 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium text-gray-700 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
+                      className="appearance-none bg-white border border-gray-300 rounded-xl px-3 sm:px-4 py-2 sm:py-2.5 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-xs sm:text-sm font-medium text-gray-700 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
                     >
-                      <option value="newest">🕐 Newest First</option>
-                      <option value="oldest">📅 Oldest First</option>
-                      <option value="popular">🔥 Most Popular</option>
-                      <option value="votes">⭐ Highest Voted</option>
+                      <option value="newest">🕐 Newest</option>
+                      <option value="oldest">📅 Oldest</option>
+                      <option value="popular">🔥 Popular</option>
+                      <option value="votes">⭐ Top Voted</option>
                     </select>
-                    <svg className="w-4 h-4 absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4 absolute right-2 sm:right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
@@ -155,25 +155,26 @@ export default function CommunityPage() {
               </div>
               
               {/* Quick Stats */}
-              <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
-                <div className="flex items-center space-x-4">
+              <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 text-xs sm:text-sm text-gray-500">
+                <div className="flex items-center flex-wrap gap-2 sm:gap-4">
                   <span className="flex items-center space-x-1">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
-                    <span>Community discussions</span>
+                    <span className="hidden sm:inline">Community discussions</span>
+                    <span className="sm:hidden">Discussions</span>
                   </span>
                   {searchQuery && (
                     <span className="flex items-center space-x-1">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 7V4z" />
                       </svg>
-                      <span>Searching for "{searchQuery}"</span>
+                      <span className="truncate max-w-[150px] sm:max-w-none">Searching: "{searchQuery}"</span>
                     </span>
                   )}
                 </div>
                 <button 
-                  className="flex items-center space-x-1 hover:text-blue-600 transition-colors"
+                  className="flex items-center space-x-1 hover:text-blue-600 transition-colors text-xs sm:text-sm"
                   onClick={() => {
                     setSearchQuery('')
                     setSelectedTag('')
@@ -183,7 +184,7 @@ export default function CommunityPage() {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                   </svg>
-                  <span className="hidden sm:inline">Reset filters</span>
+                  <span>Reset</span>
                 </button>
               </div>
             </div>
