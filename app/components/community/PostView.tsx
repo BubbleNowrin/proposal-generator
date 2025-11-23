@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { generateRandomName } from '../../utils/randomNames'
+import ImageUpload from './ImageUpload'
 import Swal from 'sweetalert2'
 
 interface User {
@@ -15,6 +16,7 @@ interface Post {
   _id: string
   title: string
   content: string
+  images?: string[]
   authorName: string
   authorType: 'logged_in' | 'random' | 'anonymous'
   authorId?: string
@@ -33,6 +35,7 @@ interface Post {
 interface Comment {
   _id: string
   content: string
+  images?: string[]
   authorName: string
   authorType: 'logged_in' | 'random' | 'anonymous'
   authorId?: string
@@ -56,6 +59,7 @@ export default function PostView({ postId, user, onBack }: PostViewProps) {
   const [comments, setComments] = useState<Comment[]>([])
   const [loading, setLoading] = useState(true)
   const [newComment, setNewComment] = useState('')
+  const [commentImages, setCommentImages] = useState<string[]>([])
   const [commentAuthorType, setCommentAuthorType] = useState<'logged_in' | 'random' | 'anonymous'>
     (user ? 'logged_in' : 'anonymous')
   const [commentCustomName, setCommentCustomName] = useState('')
@@ -196,6 +200,7 @@ export default function PostView({ postId, user, onBack }: PostViewProps) {
         body: JSON.stringify({
           postId,
           content: newComment.trim(),
+          images: commentImages,
           authorName: getCommentAuthorName(),
           authorType: commentAuthorType,
           authorId: user?.id || null
@@ -206,6 +211,7 @@ export default function PostView({ postId, user, onBack }: PostViewProps) {
 
       if (result.success) {
         setNewComment('')
+        setCommentImages([])
         await Swal.fire({
           title: 'Answer Posted!',
           text: 'Your answer has been posted successfully',
@@ -375,6 +381,25 @@ export default function PostView({ postId, user, onBack }: PostViewProps) {
 
           <div className="prose max-w-none mb-6">
             <pre className="whitespace-pre-wrap font-sans text-gray-700">{post.content}</pre>
+            
+            {/* Display post images */}
+            {post.images && post.images.length > 0 && (
+              <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-3">
+                {post.images.map((image, index) => (
+                  <div key={index} className="relative">
+                    <img
+                      src={image}
+                      alt={`Post image ${index + 1}`}
+                      className="w-full h-48 object-cover rounded-lg border cursor-pointer hover:opacity-90 transition-opacity"
+                      onClick={() => {
+                        // Open image in new tab for full view
+                        window.open(image, '_blank')
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {post.tags.length > 0 && (
@@ -452,6 +477,15 @@ export default function PostView({ postId, user, onBack }: PostViewProps) {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
                 maxLength={5000}
               />
+              
+              <div className="mb-4">
+                <ImageUpload
+                  onImagesChange={setCommentImages}
+                  maxImages={3}
+                  className="mt-3"
+                />
+              </div>
+              
               <div className="flex justify-between items-center">
                 <p className="text-xs text-gray-500">{newComment.length}/5,000 characters</p>
                 <button
@@ -506,6 +540,25 @@ export default function PostView({ postId, user, onBack }: PostViewProps) {
 
                         <div className="prose max-w-none mb-4">
                           <pre className="whitespace-pre-wrap font-sans text-gray-700">{comment.content}</pre>
+                          
+                          {/* Display comment images */}
+                          {comment.images && comment.images.length > 0 && (
+                            <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-3">
+                              {comment.images.map((image, index) => (
+                                <div key={index} className="relative">
+                                  <img
+                                    src={image}
+                                    alt={`Comment image ${index + 1}`}
+                                    className="w-full h-32 object-cover rounded-lg border cursor-pointer hover:opacity-90 transition-opacity"
+                                    onClick={() => {
+                                      // Open image in new tab for full view
+                                      window.open(image, '_blank')
+                                    }}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
 
                         <div className="flex items-center space-x-4">

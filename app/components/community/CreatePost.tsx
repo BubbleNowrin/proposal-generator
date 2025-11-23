@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { generateRandomName } from '../../utils/randomNames'
 import Swal from 'sweetalert2'
+import ImageUpload from './ImageUpload'
 
 interface User {
   id: string
@@ -243,17 +244,16 @@ export default function CreatePost({ user, onPostCreated, onCancel }: CreatePost
             </p>
           </div>
 
-          {/* Image Upload Placeholder */}
+          {/* Image Upload */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Images (Optional)
             </label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-              <svg className="w-8 h-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <p className="text-gray-500">Image upload coming soon</p>
-            </div>
+            <ImageUpload
+              onImagesChange={setImages}
+              maxImages={5}
+              className="mt-2"
+            />
           </div>
 
           {/* Preview */}
@@ -280,6 +280,20 @@ export default function CreatePost({ user, onPostCreated, onCancel }: CreatePost
               <p className="text-gray-700 whitespace-pre-wrap">
                 {content || 'Your question details will appear here'}
               </p>
+              {images.length > 0 && (
+                <div className="mt-3">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    {images.map((image, index) => (
+                      <img
+                        key={index}
+                        src={image}
+                        alt={`Preview ${index + 1}`}
+                        className="w-full h-20 object-cover rounded border"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
               {tags && (
                 <div className="flex flex-wrap gap-2 mt-3">
                   {tags.split(',').map((tag, index) => (

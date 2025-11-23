@@ -7,6 +7,7 @@ interface Post {
   _id: string
   title: string
   content: string
+  images?: string[]
   authorName: string
   authorType: 'logged_in' | 'random' | 'anonymous'
   tags: string[]
@@ -156,6 +157,31 @@ export default function PostList({
                     <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                       {post.content.substring(0, 200)}...
                     </p>
+
+                    {/* Display post images preview */}
+                    {post.images && post.images.length > 0 && (
+                      <div className="mb-4">
+                        <div className="flex space-x-2 overflow-x-auto">
+                          {post.images.slice(0, 3).map((image, index) => (
+                            <img
+                              key={index}
+                              src={image}
+                              alt={`Preview ${index + 1}`}
+                              className="w-16 h-16 object-cover rounded border flex-shrink-0"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                window.open(image, '_blank')
+                              }}
+                            />
+                          ))}
+                          {post.images.length > 3 && (
+                            <div className="w-16 h-16 bg-gray-100 rounded border flex items-center justify-center text-xs text-gray-500 flex-shrink-0">
+                              +{post.images.length - 3}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
 
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4 text-sm text-gray-500">
