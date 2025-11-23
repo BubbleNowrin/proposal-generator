@@ -21,8 +21,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       }
       
       // Remove user from both arrays first
-      comment.votes.up = comment.votes.up.filter(id => id !== userId)
-      comment.votes.down = comment.votes.down.filter(id => id !== userId)
+      comment.votes.up = comment.votes.up.filter((id: string) => id !== userId)
+      comment.votes.down = comment.votes.down.filter((id: string) => id !== userId)
       
       // Add to appropriate array
       if (voteType === 'up') {
