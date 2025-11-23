@@ -226,14 +226,14 @@ export default function ProfileDashboard({ onProfileSelected }: ProfileDashboard
   const activeProfile = profiles.find(p => p.isActive)
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-8">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">
+    <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
           👤 Your Professional Profiles
         </h2>
         <button
           onClick={() => setShowCreateForm(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-lg"
+          className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-lg text-sm sm:text-base"
         >
           + New Profile
         </button>
@@ -291,45 +291,45 @@ export default function ProfileDashboard({ onProfileSelected }: ProfileDashboard
         <div className="space-y-6">
           {/* Active Profile Display */}
           {activeProfile && (
-            <div className="bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-xl p-6 shadow-lg">
-              <div className="flex items-start justify-between mb-6">
-                <div className="flex items-start space-x-4">
+            <div className="bg-gradient-to-br from-emerald-50 to-green-50 border border-emerald-200 rounded-xl p-4 sm:p-6 shadow-lg">
+              <div className="flex flex-col sm:flex-row items-start justify-between gap-4 mb-6">
+                <div className="flex items-start space-x-3 sm:space-x-4 flex-1 w-full">
                   <div className="flex-shrink-0">
-                    <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center shadow-md">
-                      <span className="text-white font-bold text-xl">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center shadow-md">
+                      <span className="text-white font-bold text-lg sm:text-xl">
                         {activeProfile.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
                       </span>
                     </div>
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center mb-2">
-                      <span className="bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase mr-3 shadow-sm">
+                      <span className="bg-emerald-500 text-white px-2 sm:px-3 py-1 rounded-full text-xs font-semibold tracking-wide uppercase shadow-sm">
                         Active Profile
                       </span>
                     </div>
-                    <h3 className="font-bold text-2xl text-gray-900 mb-1">{activeProfile.name}</h3>
-                    <p className="text-gray-700 font-medium text-lg">{activeProfile.title}</p>
-                    <div className="flex items-center mt-2 space-x-4">
-                      <span className="text-emerald-700 font-bold text-xl">${activeProfile.hourlyRate}/hour</span>
-                      <span className="text-gray-600 text-sm bg-white px-3 py-1 rounded-full">
+                    <h3 className="font-bold text-lg sm:text-2xl text-gray-900 mb-1 truncate">{activeProfile.name}</h3>
+                    <p className="text-gray-700 font-medium text-sm sm:text-lg truncate">{activeProfile.title}</p>
+                    <div className="flex flex-wrap items-center mt-2 gap-2">
+                      <span className="text-emerald-700 font-bold text-base sm:text-xl">${activeProfile.hourlyRate}/hour</span>
+                      <span className="text-gray-600 text-xs sm:text-sm bg-white px-2 sm:px-3 py-1 rounded-full">
                         {activeProfile.skills.length} skills
                       </span>
                     </div>
                   </div>
                 </div>
                 
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 w-full sm:w-auto">
                   <div className="flex space-x-1 bg-white rounded-lg p-1 shadow-sm">
                     <button
                       onClick={() => setEditingProfile(activeProfile)}
                       disabled={actionLoading[`update-${activeProfile.id}`]}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors disabled:opacity-50"
+                      className="p-2 sm:p-2.5 text-blue-600 hover:bg-blue-50 rounded-md transition-colors disabled:opacity-50"
                       title="Edit Profile"
                     >
                       {actionLoading[`update-${activeProfile.id}`] ? (
-                        <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
                       ) : (
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
                       )}
@@ -337,13 +337,13 @@ export default function ProfileDashboard({ onProfileSelected }: ProfileDashboard
                     <button
                       onClick={() => deleteProfile(activeProfile.id)}
                       disabled={actionLoading[`delete-${activeProfile.id}`]}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors disabled:opacity-50"
+                      className="p-2 sm:p-2.5 text-red-600 hover:bg-red-50 rounded-md transition-colors disabled:opacity-50"
                       title="Delete Profile"
                     >
                       {actionLoading[`delete-${activeProfile.id}`] ? (
-                        <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                        <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
                       ) : (
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
                       )}
@@ -370,16 +370,16 @@ export default function ProfileDashboard({ onProfileSelected }: ProfileDashboard
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                 <button
                   onClick={() => setShowProfileSwitcher(!showProfileSwitcher)}
-                  className="bg-white text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors shadow-sm border border-gray-200"
+                  className="w-full sm:w-auto bg-white text-gray-700 px-4 py-2.5 sm:py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors shadow-sm border border-gray-200"
                 >
                   Switch Profile
                 </button>
                 <button
                   onClick={continueToProposal}
-                  className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                  className="w-full sm:w-auto bg-blue-600 text-white px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                 >
                   Continue to Job Entry →
                 </button>
@@ -389,12 +389,12 @@ export default function ProfileDashboard({ onProfileSelected }: ProfileDashboard
 
           {/* Profile Switcher */}
           {showProfileSwitcher && (
-            <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md">
-              <div className="flex items-center justify-between mb-6">
-                <h4 className="font-semibold text-xl text-gray-900">Choose Profile</h4>
+            <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-6 shadow-md">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h4 className="font-semibold text-lg sm:text-xl text-gray-900">Choose Profile</h4>
                 <button
                   onClick={() => setShowProfileSwitcher(false)}
-                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -406,7 +406,7 @@ export default function ProfileDashboard({ onProfileSelected }: ProfileDashboard
                 {profiles.map((profile) => (
                   <div
                     key={profile.id}
-                    className={`group p-5 border-2 rounded-xl cursor-pointer transition-all relative ${
+                    className={`group p-4 sm:p-5 border-2 rounded-xl cursor-pointer transition-all relative ${
                       profile.isActive
                         ? 'border-emerald-200 bg-gradient-to-r from-emerald-50 to-green-50 shadow-md'
                         : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 hover:shadow-sm'
@@ -415,15 +415,15 @@ export default function ProfileDashboard({ onProfileSelected }: ProfileDashboard
                   >
                     {/* Loading overlay for switching profile */}
                     {actionLoading[`switch-${profile.id}`] && (
-                      <div className="absolute inset-0 bg-white bg-opacity-75 rounded-xl flex items-center justify-center">
+                      <div className="absolute inset-0 bg-white bg-opacity-75 rounded-xl flex items-center justify-center z-10">
                         <div className="flex items-center space-x-2 text-gray-600">
                           <div className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin"></div>
                           <span className="text-sm font-medium">Switching...</span>
                         </div>
                       </div>
                     )}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4 flex-1">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                      <div className="flex items-center space-x-3 sm:space-x-4 flex-1 w-full min-w-0">
                         <div className="flex-shrink-0">
                           <div className={`w-12 h-12 rounded-lg flex items-center justify-center font-semibold text-sm ${
                             profile.isActive 
@@ -434,22 +434,22 @@ export default function ProfileDashboard({ onProfileSelected }: ProfileDashboard
                           </div>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center mb-1">
-                            <h5 className="font-semibold text-lg text-gray-900 truncate">{profile.name}</h5>
+                          <div className="flex flex-wrap items-center gap-2 mb-1">
+                            <h5 className="font-semibold text-base sm:text-lg text-gray-900 truncate">{profile.name}</h5>
                             {profile.isActive && (
-                              <span className="ml-3 bg-emerald-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                              <span className="bg-emerald-500 text-white px-2 py-1 rounded-full text-xs font-medium">
                                 ACTIVE
                               </span>
                             )}
                           </div>
-                          <p className="text-gray-600 truncate">{profile.title}</p>
-                          <p className="text-emerald-700 font-bold mt-1">${profile.hourlyRate}/hour</p>
+                          <p className="text-gray-600 text-sm truncate">{profile.title}</p>
+                          <p className="text-emerald-700 font-bold text-sm sm:text-base mt-1">${profile.hourlyRate}/hour</p>
                         </div>
                       </div>
-                      <div className={`flex items-center space-x-1 bg-white rounded-lg p-1 shadow-sm transition-opacity ${
+                      <div className={`flex items-center space-x-1 bg-white rounded-lg p-1 shadow-sm transition-opacity w-full sm:w-auto justify-end ${
                         actionLoading[`switch-${profile.id}`] || actionLoading[`delete-${profile.id}`] 
                           ? 'opacity-100' 
-                          : 'opacity-0 group-hover:opacity-100'
+                          : 'opacity-100 sm:opacity-0 sm:group-hover:opacity-100'
                       }`}>
                         <button
                           onClick={(e) => {
