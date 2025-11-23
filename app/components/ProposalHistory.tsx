@@ -29,9 +29,11 @@ interface ProposalHistoryProps {
   onClose: () => void
   onSelectProposal: (proposal: ProposalHistoryItem) => void
   isStandalone?: boolean
+  mobile?: boolean
+  compact?: boolean
 }
 
-export default function ProposalHistory({ userId, isOpen, onClose, onSelectProposal, isStandalone = false }: ProposalHistoryProps) {
+export default function ProposalHistory({ userId, isOpen, onClose, onSelectProposal, isStandalone = false, mobile = false, compact = false }: ProposalHistoryProps) {
   const [proposals, setProposals] = useState<CategorizedProposals>({
     past24Hours: [],
     past7Days: [],
@@ -70,29 +72,42 @@ export default function ProposalHistory({ userId, isOpen, onClose, onSelectPropo
   const renderProposalItem = (proposal: ProposalHistoryItem) => (
     <div
       key={proposal._id}
-      className={`p-3 rounded-lg cursor-pointer transition-colors border ${
+      className={`${
+        mobile ? 'p-4' : compact ? 'p-2.5' : 'p-3'
+      } rounded-lg cursor-pointer transition-all duration-200 border shadow-sm ${
         selectedProposal?._id === proposal._id
-          ? 'bg-blue-50 border-blue-200'
-          : 'bg-gray-50 hover:bg-gray-100 border-gray-200'
+          ? 'bg-blue-50 border-blue-300 shadow-md'
+          : 'bg-white hover:bg-gray-50 border-gray-200 hover:border-gray-300 hover:shadow-md active:scale-[0.98]'
       }`}
-      onClick={() => setSelectedProposal(proposal)}
+      onClick={() => {
+        setSelectedProposal(proposal)
+        onSelectProposal(proposal)
+      }}
     >
-      <h4 className="font-medium text-gray-900 text-sm truncate mb-1">
+      <h4 className={`font-semibold text-gray-900 mb-2 ${
+        mobile ? 'text-base line-clamp-2' : compact ? 'text-xs truncate' : 'text-sm truncate'
+      }`}>
         {proposal.jobTitle}
       </h4>
-      <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-        <span className={`px-2 py-1 rounded-full ${
+      <div className={`flex items-center flex-wrap gap-2 mb-2 ${
+        mobile ? 'text-xs' : 'text-xs'
+      }`}>
+        <span className={`px-2.5 py-1 rounded-full font-medium whitespace-nowrap ${
           proposal.matchScore >= 80 ? 'bg-green-100 text-green-700' :
           proposal.matchScore >= 60 ? 'bg-yellow-100 text-yellow-700' :
           'bg-red-100 text-red-700'
         }`}>
           {proposal.matchScore}% match
         </span>
-        <span>{formatDistanceToNow(new Date(proposal.createdAt), { addSuffix: true })}</span>
+        <span className="text-gray-500 text-xs">{formatDistanceToNow(new Date(proposal.createdAt), { addSuffix: true })}</span>
       </div>
-      <p className="text-xs text-gray-600 line-clamp-2">
-        {proposal.generatedProposal.substring(0, 100)}...
-      </p>
+      {!compact && (
+        <p className={`text-gray-600 ${
+          mobile ? 'text-sm line-clamp-2 leading-relaxed' : 'text-xs line-clamp-2'
+        }`}>
+          {proposal.generatedProposal.substring(0, mobile ? 120 : 100)}...
+        </p>
+      )}
     </div>
   )
 
@@ -100,15 +115,17 @@ export default function ProposalHistory({ userId, isOpen, onClose, onSelectPropo
     if (proposals.length === 0) return null
 
     return (
-      <div className="mb-6">
-        <h3 className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-3">
-          <span>{icon}</span>
+      <div className={mobile ? 'mb-6' : 'mb-6'}>
+        <h3 className={`flex items-center gap-2 font-semibold text-gray-700 mb-3 ${
+          mobile ? 'text-sm' : 'text-sm'
+        }`}>
+          <span className={mobile ? 'text-lg' : ''}>{icon}</span>
           {title}
-          <span className="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full">
+          <span className="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full font-medium">
             {proposals.length}
           </span>
         </h3>
-        <div className="space-y-2">
+        <div className={mobile ? 'space-y-3' : 'space-y-2'}>
           {proposals.map(renderProposalItem)}
         </div>
       </div>
@@ -116,6 +133,79 @@ export default function ProposalHistory({ userId, isOpen, onClose, onSelectPropo
   }
 
   if (!isOpen) return null
+
+  // Compact version for desktop sidebar
+  if (compact && !mobile) {
+    return (
+      <div className="h-full overflow-y-auto">
+        <div className="p-3">
+          {loading ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : (
+            <>
+              {renderSection('Past 24 hours', proposals.past24Hours, '🕐')}
+              {renderSection('Past 7 days', proposals.past7Days, '📅')}
+              {renderSection('Past 30 days', proposals.past30Days, '📊')}
+              
+              {proposals.past24Hours.length === 0 && 
+               proposals.past7Days.length === 0 && 
+               proposals.past30Days.length === 0 && (
+                <div className="text-center py-8">
+                  <div className="text-gray-400 text-3xl mb-2">📝</div>
+                  <p className="text-sm text-gray-500">No proposals yet</p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Start creating proposals
+                  </p>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    )
+  }
+
+  // Mobile-only version for history page
+  if (mobile && isStandalone) {
+    return (
+      <div className="space-y-3">
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="w-8 h-8 border-3 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        ) : (
+          <>
+            {renderSection('Past 24 hours', proposals.past24Hours, '🕐')}
+            {renderSection('Past 7 days', proposals.past7Days, '📅')}
+            {renderSection('Past 30 days', proposals.past30Days, '📊')}
+            
+            {proposals.past24Hours.length === 0 && 
+             proposals.past7Days.length === 0 && 
+             proposals.past30Days.length === 0 && (
+              <div className="text-center py-12 px-4">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="text-gray-400 text-4xl">📝</div>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">No proposals yet</h3>
+                <p className="text-sm text-gray-500 mb-6">Start creating proposals to see them here</p>
+                <button
+                  onClick={() => window.location.href = '/dashboard'}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-flex items-center space-x-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  <span>Create First Proposal</span>
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    )
+  }
 
   // Standalone version (for /history page)
   if (isStandalone) {

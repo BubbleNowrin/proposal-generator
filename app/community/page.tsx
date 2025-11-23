@@ -35,35 +35,46 @@ export default function CommunityPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 shadow-sm">
+      <header className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-20 backdrop-blur-sm bg-white/90">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4 sm:py-6">
             <div className="flex items-center space-x-2 sm:space-x-4 min-w-0 flex-1">
               <button
                 onClick={() => window.location.href = user ? '/dashboard' : '/'}
-                className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 transition-colors"
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 transition-colors group"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={user ? "M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z" : "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"} />
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 group-hover:-translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
-                <span className="hidden sm:inline">{user ? 'Dashboard' : 'Home'}</span>
+                <span className="hidden sm:inline font-medium">{user ? 'Dashboard' : 'Home'}</span>
               </button>
-              <span className="text-gray-300 hidden sm:inline">•</span>
-              <div className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 truncate">
-                <span className="hidden sm:inline">🌐 </span>Community<span className="hidden sm:inline"> Portal</span>
+              
+              <svg className="w-4 h-4 text-gray-300 hidden sm:inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+              
+              <div className="flex items-center space-x-2 min-w-0">
+                <div className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 truncate">
+                  <span className="hidden sm:inline">🌐 Community</span>
+                  <span className="sm:hidden">🌐</span>
+                </div>
+                <div className="hidden lg:flex items-center space-x-2 text-sm text-gray-500">
+                  <span>•</span>
+                  <span>Ask questions, share knowledge</span>
+                </div>
               </div>
             </div>
             
             {view === 'list' && (
               <button
                 onClick={handleCreatePost}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-3 sm:px-6 py-2 rounded-lg font-medium transition-colors flex items-center space-x-1 sm:space-x-2 flex-shrink-0"
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-3 sm:px-6 py-2 rounded-lg font-medium transition-all duration-200 flex items-center space-x-1 sm:space-x-2 flex-shrink-0 shadow-sm hover:shadow-md transform hover:scale-105"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
-                <span className="hidden sm:inline">Ask Question</span>
-                <span className="sm:hidden">Ask</span>
+                <span className="text-sm sm:text-base hidden sm:inline">Ask Question</span>
+                <span className="text-sm sm:hidden">Ask</span>
               </button>
             )}
           </div>
@@ -71,34 +82,109 @@ export default function CommunityPage() {
           {/* Search and Filters */}
           {view === 'list' && (
             <div className="pb-4 sm:pb-6">
-              <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 sm:space-x-4">
+              <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0 lg:space-x-6">
                 {/* Search Bar */}
-                <div className="flex-1 sm:max-w-md">
-                  <div className="relative">
-                    <svg className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex-1 lg:max-w-md">
+                  <div className="relative group">
+                    <svg className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                     <input
                       type="text"
-                      placeholder="Search questions..."
+                      placeholder="Search questions, topics, or keywords..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base transition-all duration-200 bg-gray-50 focus:bg-white shadow-sm"
                     />
                   </div>
                 </div>
 
-                {/* Sort Dropdown */}
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base min-w-0 sm:min-w-[140px]"
+                {/* Filters and Sort */}
+                <div className="flex items-center space-x-3">
+                  {/* Filter Tags */}
+                  <div className="flex items-center space-x-2">
+                    <button 
+                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                        selectedTag === '' 
+                          ? 'bg-blue-100 text-blue-700 shadow-sm' 
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                      onClick={() => setSelectedTag('')}
+                    >
+                      All
+                    </button>
+                    <button 
+                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                        selectedTag === 'proposal' 
+                          ? 'bg-blue-100 text-blue-700 shadow-sm' 
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                      onClick={() => setSelectedTag('proposal')}
+                    >
+                      Proposals
+                    </button>
+                    <button 
+                      className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                        selectedTag === 'freelancing' 
+                          ? 'bg-blue-100 text-blue-700 shadow-sm' 
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                      onClick={() => setSelectedTag('freelancing')}
+                    >
+                      Freelancing
+                    </button>
+                  </div>
+
+                  {/* Sort Dropdown */}
+                  <div className="relative">
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="appearance-none bg-white border border-gray-300 rounded-xl px-4 py-2.5 pr-8 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium text-gray-700 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
+                    >
+                      <option value="newest">🕐 Newest First</option>
+                      <option value="oldest">📅 Oldest First</option>
+                      <option value="popular">🔥 Most Popular</option>
+                      <option value="votes">⭐ Highest Voted</option>
+                    </select>
+                    <svg className="w-4 h-4 absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Quick Stats */}
+              <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
+                <div className="flex items-center space-x-4">
+                  <span className="flex items-center space-x-1">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span>Community discussions</span>
+                  </span>
+                  {searchQuery && (
+                    <span className="flex items-center space-x-1">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 7V4z" />
+                      </svg>
+                      <span>Searching for "{searchQuery}"</span>
+                    </span>
+                  )}
+                </div>
+                <button 
+                  className="flex items-center space-x-1 hover:text-blue-600 transition-colors"
+                  onClick={() => {
+                    setSearchQuery('')
+                    setSelectedTag('')
+                    setSortBy('newest')
+                  }}
                 >
-                  <option value="newest">Newest</option>
-                  <option value="oldest">Oldest</option>
-                  <option value="popular">Most Popular</option>
-                  <option value="votes">Highest Voted</option>
-                </select>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  <span className="hidden sm:inline">Reset filters</span>
+                </button>
               </div>
             </div>
           )}
