@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import connectDB from '../../../../lib/mongodb'
-import Post from '../../../../models/Post'
+import Post, { IPost } from '../../../../models/Post'
 import Comment from '../../../../models/Comment'
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     await connectDB()
     
-    const post = await Post.findById(params.id).lean()
+    const post = await Post.findById(params.id).lean() as any
     
     if (!post) {
       return NextResponse.json(
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     // Get comments for this post
     const comments = await Comment.find({ postId: params.id })
       .sort({ createdAt: 1 })
-      .lean()
+      .lean() as any[]
     
     // Calculate vote scores
     const postWithScore = {
