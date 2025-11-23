@@ -29,7 +29,7 @@ async function extractTextFromDocx(filePath: string): Promise<string> {
 
 async function extractTextFromImage(filePath: string): Promise<string> {
   try {
-    const { createWorker } = await import('tesseract.js')
+    const { createWorker, PSM } = await import('tesseract.js')
     
     // Create worker with multiple languages for better recognition
     const worker = await createWorker(['eng'], 1, {
@@ -39,7 +39,7 @@ async function extractTextFromImage(filePath: string): Promise<string> {
     // Configure Tesseract for better text recognition
     await worker.setParameters({
       tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@.-+()/$%#:,;!? \n',
-      tessedit_pageseg_mode: '1', // Auto page segmentation with OSD
+      tessedit_pageseg_mode: PSM.AUTO_OSD, // Auto page segmentation with OSD
       preserve_interword_spaces: '1'
     })
     
