@@ -62,3 +62,4 @@ node_modules/
 
 # Temporary files
 tmp_rovodev_*
+tmp/

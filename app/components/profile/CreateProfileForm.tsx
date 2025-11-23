@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import FileUpload from '../FileUpload'
 
 interface CreateProfileFormProps {
   onSubmit: (profileData: any) => void
@@ -47,6 +48,22 @@ export default function CreateProfileForm({ onSubmit, onCancel, showCancel, init
     })
   }
 
+  const handleFileProcessed = (result: any) => {
+    if (result.success && result.parsedData) {
+      const data = result.parsedData
+      setFormData({
+        name: data.name || formData.name,
+        title: data.title || formData.title,
+        skills: data.skills?.join(', ') || formData.skills,
+        experience: data.experience || formData.experience,
+        portfolio: data.portfolio?.join('\n') || formData.portfolio,
+        hourlyRate: data.hourlyRate?.toString() || formData.hourlyRate,
+        bio: data.bio || formData.bio,
+        specializations: data.specializations?.join(', ') || formData.specializations
+      })
+    }
+  }
+
   const fillSampleData = () => {
     setFormData({
       name: 'John Developer',
@@ -77,16 +94,32 @@ export default function CreateProfileForm({ onSubmit, onCancel, showCancel, init
       </div>
 
       {!isEditing && (
-        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <p className="text-blue-800 mb-2">
-            <strong>💡 Tip:</strong> Create multiple profiles for different specializations or client types.
-          </p>
-          <button
-            onClick={fillSampleData}
-            className="text-blue-600 hover:text-blue-800 font-medium underline text-sm"
-          >
-            Fill with sample data to get started quickly →
-          </button>
+        <div className="mb-6 space-y-4">
+          {/* File Upload Section */}
+          <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+            <h3 className="text-green-800 font-medium mb-2">🚀 Quick Setup</h3>
+            <p className="text-green-700 text-sm mb-4">
+              Upload your CV, LinkedIn profile screenshot, or any professional document to auto-fill your profile
+            </p>
+            <FileUpload 
+              onFileProcessed={handleFileProcessed}
+              uploadType="profile"
+              className="mb-4"
+            />
+          </div>
+          
+          {/* Sample Data Section */}
+          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-blue-800 mb-2">
+              <strong>💡 Alternative:</strong> Create multiple profiles for different specializations or client types.
+            </p>
+            <button
+              onClick={fillSampleData}
+              className="text-blue-600 hover:text-blue-800 font-medium underline text-sm"
+            >
+              Fill with sample data to get started quickly →
+            </button>
+          </div>
         </div>
       )}
 

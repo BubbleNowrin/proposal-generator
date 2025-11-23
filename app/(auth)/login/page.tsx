@@ -46,7 +46,7 @@ export default function LoginPage() {
               </svg>
             </div>
             <div>
-              <h1 className="text-xl font-bold text-blue-600">ProposalCraft</h1>
+              <h1 className="text-xl font-bold text-blue-600">FreelanceHub</h1>
               <p className="text-xs text-gray-500">Free AI Proposals</p>
             </div>
           </Link>

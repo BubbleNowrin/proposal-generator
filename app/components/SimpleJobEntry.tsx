@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { JobData } from '../types'
+import FileUpload from './FileUpload'
 
 interface SimpleJobEntryProps {
   onJobSubmitted: (jobData: JobData) => void
@@ -250,6 +251,23 @@ export default function SimpleJobEntry({ onJobSubmitted, onBack }: SimpleJobEntr
     }
   }
 
+  const handleFileProcessed = (result: any) => {
+    if (result.success && result.parsedData) {
+      const data = result.parsedData
+      setFormData({
+        title: data.title || formData.title,
+        description: data.description || formData.description,
+        budget: data.budget || formData.budget,
+        skills: data.skillsRequired?.join(', ') || formData.skills,
+        deadline: data.duration || formData.deadline
+      })
+      
+      // Clear validations after auto-fill
+      setBudgetValidation({ isValid: true, message: '', type: 'neutral' })
+      setSkillsValidation({ isValid: true, message: '', type: 'neutral' })
+    }
+  }
+
   // Quick fill with sample data
   const fillSampleData = () => {
     setFormData({
@@ -301,16 +319,32 @@ export default function SimpleJobEntry({ onJobSubmitted, onBack }: SimpleJobEntr
         </button>
       </div>
 
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <p className="text-blue-800 mb-2">
-          <strong>💡 Tip:</strong> Copy and paste the job details directly from Upwork for best results.
-        </p>
-        <button
-          onClick={fillSampleData}
-          className="text-blue-600 hover:text-blue-800 font-medium underline text-sm"
-        >
-          Or click here to load sample job data →
-        </button>
+      <div className="mb-6 space-y-4">
+        {/* File Upload Section */}
+        <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+          <h3 className="text-green-800 font-medium mb-2">🚀 Quick Job Entry</h3>
+          <p className="text-green-700 text-sm mb-4">
+            Upload a job posting screenshot, PDF, or document to auto-fill the job details
+          </p>
+          <FileUpload 
+            onFileProcessed={handleFileProcessed}
+            uploadType="job"
+            className="mb-4"
+          />
+        </div>
+        
+        {/* Sample Data Section */}
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-blue-800 mb-2">
+            <strong>💡 Alternative:</strong> Copy and paste the job details directly from Upwork for best results.
+          </p>
+          <button
+            onClick={fillSampleData}
+            className="text-blue-600 hover:text-blue-800 font-medium underline text-sm"
+          >
+            Or click here to load sample job data →
+          </button>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">

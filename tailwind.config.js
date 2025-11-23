@@ -14,6 +14,12 @@ module.exports = {
           600: '#2563eb',
           700: '#1d4ed8',
         }
+      },
+      fontFamily: {
+        'sans': ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        'display': ['var(--font-outfit)', 'system-ui', 'sans-serif'],
+        'heading': ['var(--font-space-grotesk)', 'system-ui', 'sans-serif'],
+        'body': ['var(--font-poppins)', 'system-ui', 'sans-serif'],
       }
     },
   },

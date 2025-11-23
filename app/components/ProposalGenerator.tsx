@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { UserProfile, JobData, GeneratedProposal } from '../types'
+import ProposalHistory from './ProposalHistory'
+import { useAuth } from '../context/AuthContext'
 
 interface ProposalGeneratorProps {
   userProfile: UserProfile
@@ -18,11 +20,65 @@ export default function ProposalGenerator({
   onBack, 
   onReset 
 }: ProposalGeneratorProps) {
+  const { user } = useAuth()
   const [proposal, setProposal] = useState<GeneratedProposal | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState('')
   const [tone, setTone] = useState('professional')
   const [length, setLength] = useState('medium')
+  const [showHistory, setShowHistory] = useState(false)
+
+  const saveToHistory = async (proposalData: GeneratedProposal) => {
+    try {
+      console.log('Saving proposal to history:', {
+        userId: 'current-user',
+        jobTitle: jobData.title,
+        profileUsed: userProfile.name
+      })
+      
+      const response = await fetch('/api/proposal-history', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user?.id || user?.email || 'anonymous', // Use actual user ID from auth context
+          jobTitle: jobData.title,
+          jobDescription: jobData.description,
+          generatedProposal: proposalData.proposal,
+          estimatedBudget: proposalData.estimatedBudget,
+          timeline: proposalData.timeline,
+          keyPoints: proposalData.keyPoints,
+          matchScore: proposalData.matchScore,
+          missingSkills: proposalData.missingSkills,
+          profileUsed: userProfile.name
+        })
+      })
+      
+      const result = await response.json()
+      console.log('Save to history result:', result)
+      
+      if (!result.success) {
+        console.error('Failed to save to history:', result.error)
+      }
+    } catch (error) {
+      console.error('Error saving to history:', error)
+    }
+  }
+
+  const handleSelectFromHistory = (historicalProposal: any) => {
+    const proposalData: GeneratedProposal = {
+      proposal: historicalProposal.generatedProposal,
+      estimatedBudget: historicalProposal.estimatedBudget,
+      timeline: historicalProposal.timeline,
+      keyPoints: historicalProposal.keyPoints,
+      matchScore: historicalProposal.matchScore,
+      missingSkills: historicalProposal.missingSkills
+    }
+    setProposal(proposalData)
+    onProposalGenerated(proposalData)
+    setShowHistory(false)
+  }
 
   const generateProposal = async () => {
     setIsGenerating(true)
@@ -51,6 +107,9 @@ export default function ProposalGenerator({
       const generatedProposal = await response.json()
       setProposal(generatedProposal)
       onProposalGenerated(generatedProposal)
+      
+      // Save to history
+      await saveToHistory(generatedProposal)
     } catch (err) {
       setError('Failed to generate proposal. Please try again.')
       console.error('Proposal generation error:', err)
@@ -145,6 +204,13 @@ export default function ProposalGenerator({
             className="text-blue-500 hover:text-blue-700 font-medium"
           >
             ← Back to Job
+          </button>
+          
+          <button
+            onClick={() => setShowHistory(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
+          >
+            📋 Proposal History
           </button>
           <button
             onClick={onReset}
@@ -346,6 +412,14 @@ export default function ProposalGenerator({
           </div>
         </div>
       )}
+
+      {/* Proposal History Modal */}
+      <ProposalHistory
+        userId={user?.id || user?.email || 'anonymous'}
+        isOpen={showHistory}
+        onClose={() => setShowHistory(false)}
+        onSelectProposal={handleSelectFromHistory}
+      />
     </div>
   )
 }

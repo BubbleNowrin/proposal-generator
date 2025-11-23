@@ -5,6 +5,8 @@ import { useAuth } from '../context/AuthContext'
 import ProfileDashboard from './profile/ProfileDashboard'
 import SimpleJobEntry from './SimpleJobEntry'
 import ProposalGenerator from './ProposalGenerator'
+import ProposalHistory from './ProposalHistory'
+import DashboardBottomNav from './DashboardBottomNav'
 import { UserProfile, JobData, GeneratedProposal } from '../types'
 import Link from 'next/link'
 
@@ -15,15 +17,19 @@ export default function Dashboard() {
   const [jobData, setJobData] = useState<JobData | null>(null)
   const [proposal, setProposal] = useState<GeneratedProposal | null>(null)
   const [showProfileMenu, setShowProfileMenu] = useState(false)
+  const [showHistory, setShowHistory] = useState(false)
+  const [activeTab, setActiveTab] = useState('dashboard')
 
   const handleProfileSelected = (profile: UserProfile) => {
     setUserProfile(profile)
     setCurrentStep(2)
+    setActiveTab('dashboard')
   }
 
   const handleJobSubmitted = (job: JobData) => {
     setJobData(job)
     setCurrentStep(3)
+    setActiveTab('dashboard')
   }
 
   const handleProposalGenerated = (generatedProposal: GeneratedProposal) => {
@@ -37,157 +43,108 @@ export default function Dashboard() {
   }
 
   const goToProfiles = () => {
+    setActiveTab('dashboard')
     setCurrentStep(1)
     setJobData(null)
     setProposal(null)
   }
 
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab)
+    
+    switch (tab) {
+      case 'dashboard':
+        setShowHistory(false)
+        break
+      case 'profiles':
+        setCurrentStep(1)
+        setShowHistory(false)
+        break
+      case 'history':
+        setShowHistory(true)
+        break
+      case 'posts':
+        window.location.href = '/community/my-posts'
+        break
+    }
+  }
+
+  const handleSelectFromHistory = (historicalProposal: any) => {
+    const proposalData: GeneratedProposal = {
+      proposal: historicalProposal.generatedProposal,
+      estimatedBudget: historicalProposal.estimatedBudget,
+      timeline: historicalProposal.timeline,
+      keyPoints: historicalProposal.keyPoints,
+      matchScore: historicalProposal.matchScore,
+      missingSkills: historicalProposal.missingSkills
+    }
+    setProposal(proposalData)
+    setShowHistory(false)
+    setActiveTab('dashboard')
+    setCurrentStep(3)
+  }
+
   return (
-    <main className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            {/* Logo */}
-            <Link href="/dashboard" className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-blue-600">ProposalCraft</h1>
-                <p className="text-xs text-gray-500">Free AI Proposals</p>
-              </div>
-            </Link>
-
-            {/* Right Side - Profile Menu */}
-            <div className="flex items-center space-x-4">
-              {/* Profile Dropdown */}
-              <div className="relative">
-                <button
-                  onClick={() => setShowProfileMenu(!showProfileMenu)}
-                  className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 rounded-full pl-3 pr-2 py-2 transition-colors"
-                >
-                  <span className="text-sm font-medium text-gray-700 hidden sm:block">{user?.name}</span>
-                  <div className="w-9 h-9 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                    {user?.name?.charAt(0).toUpperCase()}
-                  </div>
-                </button>
-
-                {/* Dropdown Menu */}
-                {showProfileMenu && (
-                  <>
-                    <div 
-                      className="fixed inset-0 z-10"
-                      onClick={() => setShowProfileMenu(false)}
-                    />
-                    <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-20">
-                      {/* User Info */}
-                      <div className="px-4 py-3 border-b border-gray-100">
-                        <p className="text-sm font-semibold text-gray-900">{user?.name}</p>
-                        <p className="text-xs text-gray-500">{user?.email}</p>
-                      </div>
-                      
-                      {/* Menu Items */}
-                      <button
-                        onClick={() => {
-                          setCurrentStep(1)
-                          setShowProfileMenu(false)
-                        }}
-                        className="w-full px-4 py-3 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3 transition-colors"
-                      >
-                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                        <span>My Profiles</span>
-                      </button>
-                      
-                      <div className="border-t border-gray-100 mt-1 pt-1">
-                        <button
-                          onClick={() => {
-                            setShowProfileMenu(false)
-                            logout()
-                          }}
-                          className="w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-red-50 flex items-center space-x-3 transition-colors"
-                        >
-                          <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                          </svg>
-                          <span className="font-medium">Sign Out</span>
-                        </button>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+    <main className="min-h-screen bg-gray-50 pt-16 pb-20">
+      {/* Content */}
       <div className="container mx-auto px-4 py-8">
-
-        {/* Progress Steps */}
-        <div className="flex justify-center mb-8">
-          <div className="flex items-center space-x-8">
-            {[1, 2, 3].map((step) => (
-              <div key={step} className="flex items-center">
-                <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${
-                    step <= currentStep
-                      ? 'bg-blue-600'
-                      : 'bg-gray-300'
-                  }`}
-                >
-                  {step}
+        {/* Progress Steps - Hidden when history is open */}
+        {!showHistory && (
+          <div className="max-w-4xl mx-auto mb-8">
+            <div className="flex items-center justify-center space-x-8 py-8">
+              {/* Step 1 */}
+              <div className={`flex flex-col items-center transition-colors ${
+                currentStep === 1 ? 'text-blue-600' : 'text-gray-400'
+              }`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg mb-2 transition-colors ${
+                  currentStep >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'
+                }`}>
+                  1
                 </div>
-                <span className="ml-2 text-sm text-gray-600">
-                  {step === 1 && 'Profiles'}
-                  {step === 2 && 'Job Entry'}
-                  {step === 3 && 'Generate Proposal'}
-                </span>
-                {step < 3 && (
-                  <div
-                    className={`w-16 h-1 ml-4 ${
-                      step < currentStep ? 'bg-blue-600' : 'bg-gray-300'
-                    }`}
-                  />
-                )}
+                <span className="text-sm font-medium">Choose Profile</span>
+                <span className="text-xs opacity-75">Select freelance profile</span>
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* Profile Status Bar */}
-        {userProfile && currentStep > 1 && (
-          <div className="max-w-4xl mx-auto mb-6">
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center justify-between">
-              <div>
-                <p className="text-green-800 font-medium">✅ Active Profile: {userProfile.name}</p>
-                <p className="text-sm text-green-600">{userProfile.title} • ${userProfile.hourlyRate}/hr</p>
+              {/* Connector */}
+              <div className={`h-0.5 w-16 transition-colors ${
+                currentStep >= 2 ? 'bg-blue-600' : 'bg-gray-300'
+              }`}></div>
+
+              {/* Step 2 */}
+              <div className={`flex flex-col items-center transition-colors ${
+                currentStep === 2 ? 'text-blue-600' : 'text-gray-400'
+              }`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg mb-2 transition-colors ${
+                  currentStep >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'
+                }`}>
+                  2
+                </div>
+                <span className="text-sm font-medium">Enter Job</span>
+                <span className="text-xs opacity-75">Job description & details</span>
               </div>
-              <div className="flex space-x-2">
-                <button
-                  onClick={goToProfiles}
-                  className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                >
-                  Switch Profile
-                </button>
-                {currentStep === 3 && (
-                  <button
-                    onClick={startNewJob}
-                    className="bg-blue-600 text-white px-4 py-2 rounded text-sm font-medium hover:bg-blue-700 shadow-lg"
-                  >
-                    New Job
-                  </button>
-                )}
+
+              {/* Connector */}
+              <div className={`h-0.5 w-16 transition-colors ${
+                currentStep >= 3 ? 'bg-blue-600' : 'bg-gray-300'
+              }`}></div>
+
+              {/* Step 3 */}
+              <div className={`flex flex-col items-center transition-colors ${
+                currentStep === 3 ? 'text-blue-600' : 'text-gray-400'
+              }`}>
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg mb-2 transition-colors ${
+                  currentStep >= 3 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'
+                }`}>
+                  3
+                </div>
+                <span className="text-sm font-medium">Generate</span>
+                <span className="text-xs opacity-75">AI proposal creation</span>
               </div>
             </div>
           </div>
         )}
 
-        {/* Content */}
+        {/* Main Content Area */}
         <div className="max-w-4xl mx-auto">
           {currentStep === 1 && (
             <ProfileDashboard onProfileSelected={handleProfileSelected} />
@@ -210,7 +167,26 @@ export default function Dashboard() {
             />
           )}
         </div>
+
+        {/* Proposal History */}
+        {showHistory && (
+          <ProposalHistory
+            userId={user?.id || user?.email || 'anonymous'}
+            isOpen={true}
+            onClose={() => {
+              setShowHistory(false)
+              setActiveTab('dashboard')
+            }}
+            onSelectProposal={handleSelectFromHistory}
+          />
+        )}
       </div>
+
+      {/* Bottom Navigation */}
+      <DashboardBottomNav
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+      />
     </main>
   )
 }
