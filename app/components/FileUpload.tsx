@@ -26,16 +26,22 @@ export default function FileUpload({ onFileProcessed, uploadType, className = ''
     }
 
     const allowedTypes = [
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'application/msword',
-      'text/plain',
-      'image/jpeg',
-      'image/png',
-      'image/jpg'
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+      'application/msword', // .doc
+      'application/pdf', // .pdf
+      'application/rtf', // .rtf
+      'text/rtf', // .rtf
+      'text/plain', // .txt
+      'image/jpeg', // .jpg
+      'image/jpg', // .jpg
+      'image/png', // .png
+      'image/gif', // .gif
+      'image/bmp', // .bmp
+      'image/webp' // .webp
     ]
 
     if (!allowedTypes.includes(file.type)) {
-      setError('Please upload a Word document (.doc/.docx), text file (.txt), or image (JPG/PNG)')
+      setError('Please upload a supported file: Word documents (.doc/.docx), PDF (.pdf), RTF (.rtf), text files (.txt), or images (JPG, PNG, GIF, BMP, WebP)')
       return
     }
 
@@ -102,8 +108,8 @@ export default function FileUpload({ onFileProcessed, uploadType, className = ''
     : '📋 Upload Job Description'
 
   const uploadDescription = uploadType === 'profile'
-    ? 'Upload your CV, LinkedIn profile screenshot, or any document containing your professional information'
-    : 'Upload job posting screenshot, PDF, or document with job description'
+    ? 'Upload your CV, LinkedIn profile screenshot, or any document containing your professional information. AI will extract key details automatically.'
+    : 'Upload job posting screenshot, PDF, or document with job description. AI will parse the requirements and details.'
 
   return (
     <div className={`${className}`}>
@@ -123,7 +129,7 @@ export default function FileUpload({ onFileProcessed, uploadType, className = ''
           ref={fileInputRef}
           type="file"
           className="hidden"
-          accept=".doc,.docx,.txt,.jpg,.jpeg,.png"
+          accept=".doc,.docx,.pdf,.rtf,.txt,.jpg,.jpeg,.png,.gif,.bmp,.webp"
           onChange={handleFileInput}
           disabled={isProcessing}
         />
@@ -148,10 +154,10 @@ export default function FileUpload({ onFileProcessed, uploadType, className = ''
               {uploadDescription}
             </p>
             <div className="text-sm text-gray-500">
-              <span className="font-medium">Supported formats:</span> Word documents (.doc/.docx), Text files (.txt), Images (JPG/PNG)
+              <span className="font-medium">Supported formats:</span> Word docs (.doc/.docx), PDF (.pdf), RTF (.rtf), Text files (.txt), Images (JPG/PNG/GIF/BMP/WebP)
             </div>
             <div className="text-xs text-gray-400 mt-1">
-              💡 Best results: Upload CV as Word doc, or screenshots of LinkedIn/job postings
+              💡 Best results: Word docs for resumes, PDFs for job postings, clear images for screenshots
             </div>
             <div className="text-sm text-gray-400 mt-1">
               Max file size: 10MB
