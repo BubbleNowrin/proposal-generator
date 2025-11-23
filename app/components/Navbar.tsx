@@ -55,13 +55,15 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-sm">
-                <span className="text-white font-bold text-lg">FH</span>
+            <Link href="/" className="flex items-center space-x-2 sm:space-x-3">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-md hover:shadow-lg transition-shadow">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
               </div>
               <div className="flex flex-col">
-                <span className="font-heading text-xl font-bold text-gray-900">FreelanceHub</span>
-                <span className="font-sans text-xs text-gray-500 -mt-1">Proposal Generator</span>
+                <span className="font-heading text-lg sm:text-xl font-bold text-gray-900 leading-tight">FreelanceHub</span>
+                <span className="font-sans text-[10px] sm:text-xs text-gray-500 -mt-0.5">Proposal Generator</span>
               </div>
             </Link>
           </div>
